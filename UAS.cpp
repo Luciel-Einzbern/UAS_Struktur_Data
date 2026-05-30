@@ -259,25 +259,64 @@ void updateStatistik(string namaPem, string namaKlub, int tipe) {
 }
 
 void tampilRankingPemain() {
+    if (jmlRankPemain == 0) {
+        cout << "\nBelum ada data pemain yang mencetak goal atau assist.\n";
+        return;
+    }
+
+    StatistikPemain GoalRanking[totalPemain];
+    StatistikPemain AssistRanking[totalPemain];
+
+    for(int i = 0; i < jmlRankPemain; i++) {
+        GoalRanking[i] = rankPemain[i];
+        AssistRanking[i] = rankPemain[i];
+    }
+
     for(int i = 0; i < jmlRankPemain - 1; i++) {
         for(int j = 0; j < jmlRankPemain - i - 1; j++) {
-            if(rankPemain[j].goal < rankPemain[j+1].goal || 
-              (rankPemain[j].goal == rankPemain[j+1].goal && rankPemain[j].assist < rankPemain[j+1].assist)) {
-                StatistikPemain temp = rankPemain[j];
-                rankPemain[j] = rankPemain[j+1];
-                rankPemain[j+1] = temp;
+            if(GoalRanking[j].goal < GoalRanking[j+1].goal || 
+              (GoalRanking[j].goal == GoalRanking[j+1].goal && GoalRanking[j].assist < GoalRanking[j+1].assist)) {
+                StatistikPemain temp = GoalRanking[j];
+                GoalRanking[j] = GoalRanking[j+1];
+                GoalRanking[j+1] = temp;
+            }
+        }
+    }
+
+    for(int i = 0; i < jmlRankPemain - 1; i++) {
+        for(int j = 0; j < jmlRankPemain - i - 1; j++) {
+            if(AssistRanking[j].assist < AssistRanking[j+1].assist) {
+                StatistikPemain temp = AssistRanking[j];
+                AssistRanking[j] = AssistRanking[j+1];
+                AssistRanking[j+1] = temp;
             }
         }
     }
     
-    cout << "\n--- RANKING GOAL & ASSIST PEMAIN ---\n";
-    if (jmlRankPemain == 0) {
-        cout << "Belum ada data pencetak gol/assist.\n";
+    cout << "\n--- TOP GOAL ---\n";
+    int noGoal = 0;
+    for(int i = 0; i < jmlRankPemain; i++) {
+        if (GoalRanking[i].goal > 0) {
+            noGoal++;
+            cout << noGoal << ". " << GoalRanking[i].namaPemain << " (" << GoalRanking[i].namaKlub 
+             << ") | Goal: " << GoalRanking[i].goal << " | Assist: " << GoalRanking[i].assist << "\n";
+        }
+    }
+    if (noGoal == 0) {
+        cout << "Belum ada pemain yang mencetak gol.\n";
     }
 
+    cout << "\n--- TOP ASSIST ---\n";
+    int noAssist = 0;
     for(int i = 0; i < jmlRankPemain; i++) {
-        cout << i+1 << ". " << rankPemain[i].namaPemain << " (" << rankPemain[i].namaKlub 
-             << ") | Goal: " << rankPemain[i].goal << " | Assist: " << rankPemain[i].assist << "\n";
+        if (AssistRanking[i].assist > 0) {
+            noAssist++;
+            cout << noAssist << ". " << AssistRanking[i].namaPemain << " (" << AssistRanking[i].namaKlub 
+                 << ") | Assist: " << AssistRanking[i].assist << "\n";
+        }
+    }
+    if (noAssist == 0) {
+        cout << "Belum ada pemain yang memberikan assist.\n";
     }
 }
 
@@ -300,9 +339,24 @@ void catatPertandingan() {
     historiGraph.adjMatrix[id1][id2] = true;
     historiGraph.adjMatrix[id2][id1] = true;
 
-    int gol1, gol2;
-    cout << "Masukkan Skor " << tim1->namaKlub << ": "; cin >> gol1;
-    cout << "Masukkan Skor " << tim2->namaKlub << ": "; cin >> gol2;
+    int gol1 = 0, gol2 = 0;
+
+    cout << "Masukkan Skor " << tim1->namaKlub << ": ";
+    while (!(cin >> gol1)) {
+        cout << "Input tidak valid! Harap masukkan angka.\n";
+        cout << "Masukkan Skor " << tim1->namaKlub << ": ";
+        cin.clear(); 
+        cin.ignore(); 
+    }
+
+    cout << "Masukkan Skor " << tim2->namaKlub << ": ";
+    while (!(cin >> gol2)) {
+        cout << "Input tidak valid! Harap masukkan angka.\n";
+        cout << "Masukkan Skor " << tim2->namaKlub << ": ";
+        cin.clear(); 
+        cin.ignore(); 
+    }
+
     cin.ignore();
 
     if (gol1 > gol2) { 
@@ -360,21 +414,33 @@ void inisialisasiData() {
         return k;
     };
 
-    // Klub* k1 = buatKlub(0, "Garuda FC", "Indonesia");
-    // tambahPemain(k1->rosterTim, "Andi", "Striker", 9);
-    // tambahPemain(k1->rosterTim, "Budi", "Midfielder", 10);
-    
-    // Klub* k2 = buatKlub(1, "Harimau Malaya", "Malaysia");
-    // tambahPemain(k2->rosterTim, "Safawi", "Striker", 11);
-    // tambahPemain(k2->rosterTim, "Faisal", "Winger", 7);
+    Klub* k1 = buatKlub(0, "Chelsea FC", "Inggris");
+    tambahPemain(k1->rosterTim, "Robert Sanchez", "Kiper", 1);
+    tambahPemain(k1->rosterTim, "Levi Colwill", "Bek", 6);
+    tambahPemain(k1->rosterTim, "Enzo Fernandez", "Gelandang", 8);
+    tambahPemain(k1->rosterTim, "Pedro Neto", "Penyerang", 7);
 
-    // Klub* k3 = buatKlub(2, "Gajah Perang", "Thailand");
-    // tambahPemain(k3->rosterTim, "Teerasil", "Striker", 10);
-    // tambahPemain(k3->rosterTim, "Chanathip", "Midfielder", 18);
+    Klub* k2 = buatKlub(1, "Arsenal FC", "Inggris");
+    tambahPemain(k2->rosterTim, "David Raya", "Kiper", 22);
+    tambahPemain(k2->rosterTim, "William Saliba", "Bek", 2);
+    tambahPemain(k2->rosterTim, "Martin Odegaard", "Gelandang", 8);
+    tambahPemain(k2->rosterTim, "Bukayo Saka", "Penyerang", 7);
 
-    // enqueue(0, 1); 
-    // enqueue(1, 2); 
-    // enqueue(0, 2); 
+    Klub* k3 = buatKlub(2, "Manchester United", "Inggris");
+    tambahPemain(k3->rosterTim, "Altay Bayindir", "Kiper", 1);
+    tambahPemain(k3->rosterTim, "Lisandro Martinez", "Bek", 6);
+    tambahPemain(k3->rosterTim, "Bruno Fernandes", "Gelandang", 8);
+    tambahPemain(k3->rosterTim, "Joshua Zirkzee", "Penyerang", 11);
+
+    Klub* k4 = buatKlub(3, "Liverpool", "Inggris");
+    tambahPemain(k4->rosterTim, "Allison Becker", "Kiper", 1);
+    tambahPemain(k4->rosterTim, "Virgil van Dijk", "Bek", 4);
+    tambahPemain(k4->rosterTim, "Alexis Mac Allister", "Gelandang", 10);
+    tambahPemain(k4->rosterTim, "Cody Gakpo", "Penyerang", 18);
+
+    enqueue(0, 1); 
+    enqueue(1, 2); 
+    enqueue(0, 2); 
 }
 
 int main() {
