@@ -303,7 +303,7 @@ void tampilRankingPemain() {
         }
     }
     if (noGoal == 0) {
-        cout << "Belum ada pemain yang mencetak gol.\n";
+        cout << "Belum ada pemain yang mencetak goal.\n";
     }
 
     cout << "\n--- TOP ASSIST ---\n";
@@ -338,11 +338,11 @@ void catatPertandingan() {
     
     historiGraph.adjMatrix[id1][id2] = true;
     historiGraph.adjMatrix[id2][id1] = true;
-
-    int gol1 = 0, gol2 = 0;
+    
+    int goal1 = 0, goal2 = 0;
 
     cout << "Masukkan Skor " << tim1->namaKlub << ": ";
-    while (!(cin >> gol1)) {
+    while (!(cin >> goal1)) {
         cout << "Input tidak valid! Harap masukkan angka.\n";
         cout << "Masukkan Skor " << tim1->namaKlub << ": ";
         cin.clear(); 
@@ -350,7 +350,7 @@ void catatPertandingan() {
     }
 
     cout << "Masukkan Skor " << tim2->namaKlub << ": ";
-    while (!(cin >> gol2)) {
+    while (!(cin >> goal2)) {
         cout << "Input tidak valid! Harap masukkan angka.\n";
         cout << "Masukkan Skor " << tim2->namaKlub << ": ";
         cin.clear(); 
@@ -359,16 +359,16 @@ void catatPertandingan() {
 
     cin.ignore();
 
-    if (gol1 > gol2) { 
+    if (goal1 > goal2) { 
         tim1->poin += 3; 
-    } else if (gol2 > gol1) { 
+    } else if (goal2 > goal1) { 
         tim2->poin += 3; 
     } else { 
         tim1->poin += 1; 
         tim2->poin += 1; 
     }
 
-    for(int i = 0; i < gol1; i++) {
+    for(int i = 0; i < goal1; i++) {
         string pencetak, assist;
         cout << "\n[Tim " << tim1->namaKlub << "] Gol ke-" << i+1 << " dicetak oleh: ";
         getline(cin, pencetak);
@@ -381,7 +381,7 @@ void catatPertandingan() {
         }
     }
     
-    for(int i = 0; i < gol2; i++) {
+    for(int i = 0; i < goal2; i++) {
         string pencetak, assist;
         cout << "\n[Tim " << tim2->namaKlub << "] Gol ke-" << i+1 << " dicetak oleh: ";
         getline(cin, pencetak);
@@ -394,8 +394,8 @@ void catatPertandingan() {
         }
     }
 
-    pushStack(tim1->namaKlub, tim2->namaKlub, gol1, gol2);
-    cout << "\nPertandingan selesai dicatat & riwayat telah disimpan di Stack!\n";
+    pushStack(tim1->namaKlub, tim2->namaKlub, goal1, goal2);
+    cout << "\nPertandingan selesai dicatat!\n";
 }
 
 void inisialisasiData() {
@@ -418,29 +418,52 @@ void inisialisasiData() {
     tambahPemain(k1->rosterTim, "Robert Sanchez", "Kiper", 1);
     tambahPemain(k1->rosterTim, "Levi Colwill", "Bek", 6);
     tambahPemain(k1->rosterTim, "Enzo Fernandez", "Gelandang", 8);
+    tambahPemain(k1->rosterTim, "Cole Parmer", "Gelandang", 20);
     tambahPemain(k1->rosterTim, "Pedro Neto", "Penyerang", 7);
+    tambahPemain(k1->rosterTim, "Christopher Nkunku", "Penyerang", 18);
 
     Klub* k2 = buatKlub(1, "Arsenal FC", "Inggris");
     tambahPemain(k2->rosterTim, "David Raya", "Kiper", 22);
     tambahPemain(k2->rosterTim, "William Saliba", "Bek", 2);
     tambahPemain(k2->rosterTim, "Martin Odegaard", "Gelandang", 8);
+    tambahPemain(k2->rosterTim, "Declan Rice", "Gelandang", 41);
     tambahPemain(k2->rosterTim, "Bukayo Saka", "Penyerang", 7);
+    tambahPemain(k2->rosterTim, "Gabriel Martinelli", "Penyerang", 11);
 
     Klub* k3 = buatKlub(2, "Manchester United", "Inggris");
     tambahPemain(k3->rosterTim, "Altay Bayindir", "Kiper", 1);
     tambahPemain(k3->rosterTim, "Lisandro Martinez", "Bek", 6);
     tambahPemain(k3->rosterTim, "Bruno Fernandes", "Gelandang", 8);
+    tambahPemain(k3->rosterTim, "Casemiro", "Gelandang", 18);
     tambahPemain(k3->rosterTim, "Joshua Zirkzee", "Penyerang", 11);
+    tambahPemain(k3->rosterTim, "Marcus Rashford", "Penyerang", 10);
 
-    Klub* k4 = buatKlub(3, "Liverpool", "Inggris");
-    tambahPemain(k4->rosterTim, "Allison Becker", "Kiper", 1);
-    tambahPemain(k4->rosterTim, "Virgil van Dijk", "Bek", 4);
-    tambahPemain(k4->rosterTim, "Alexis Mac Allister", "Gelandang", 10);
-    tambahPemain(k4->rosterTim, "Cody Gakpo", "Penyerang", 18);
+    Klub* k4 = buatKlub(3, "Manchester City", "Inggris");
+    tambahPemain(k4->rosterTim, "Stefan Ortega", "Kiper", 18);
+    tambahPemain(k4->rosterTim, "Ruben Dias", "Bek", 3);
+    tambahPemain(k4->rosterTim, "Rodri", "Gelandang", 16);
+    tambahPemain(k4->rosterTim, "Kevin De Bruyne", "Gelandang", 17);
+    tambahPemain(k4->rosterTim, "Erling Haaland", "Penyerang", 9);
+    tambahPemain(k4->rosterTim, "Oscar Bob", "Penyerang", 52);
 
+    Klub* k5 = buatKlub(4, "Liverpool", "Inggris");
+    tambahPemain(k5->rosterTim, "Allison Becker", "Kiper", 1);
+    tambahPemain(k5->rosterTim, "Virgil van Dijk", "Bek", 4);
+    tambahPemain(k5->rosterTim, "Alexis Mac Allister", "Gelandang", 10);
+    tambahPemain(k5->rosterTim, "Wataru Endo", "Gelandang", 3);
+    tambahPemain(k5->rosterTim, "Cody Gakpo", "Penyerang", 18);
+    tambahPemain(k5->rosterTim, "Luiz Dias", "Penyerang", 7);
+
+    enqueue(0, 4); 
+    enqueue(1, 2);
+    enqueue(0, 3);
+    enqueue(4, 2);
+    enqueue(0, 2);
+    enqueue(3, 1);
+    enqueue(1, 4);
+    enqueue(2, 3);
     enqueue(0, 1); 
-    enqueue(1, 2); 
-    enqueue(0, 2); 
+    enqueue(3, 4); 
 }
 
 int main() {
